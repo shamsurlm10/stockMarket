@@ -1,0 +1,13 @@
+<!-- stocks/templates/stock_form.html -->
+<html>
+<body>
+    <h2>{% if form.instance.pk %}Edit{% else %}Create{% endif %} Stock</h2>
+    <form method="post" action="{% if form.instance.pk %}{% url 'stock_edit' pk=form.instance.pk %}{% else %}{% url 'stock_create' %}{% endif %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">{% if form.instance.pk %}Update{% else %}Create{% endif %} Stock</button>
+    </form>
+
+    <a href="{% url 'home' %}">Back to Home</a>
+</body>
+</html>

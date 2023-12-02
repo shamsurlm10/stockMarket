@@ -1,0 +1,95 @@
+<!-- stocks/templates/home.html -->
+<html>
+<head>
+    <title>Stock Data</title>
+    <!-- Add necessary scripts and styles for charting library (Chart.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        canvas {
+            max-width: 800px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Stock Data</h1>
+
+    <!-- Line chart and dropdown for trade_code selection -->
+    <div>
+        <label for="tradeCodeDropdown">Select Trade Code:</label>
+        <select id="tradeCodeDropdown" onchange="updateChartData()">
+            <option value="all">All Trade Codes</option>
+            <!-- Add options dynamically based on available trade codes -->
+            {% for trade_code in trade_codes %}
+                <option value="{{ trade_code }}">{{ trade_code }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div>
+        <canvas id="lineChart"></canvas>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Trade Code</th>
+                <th>High</th>
+                <th>Low</th>
+                <th>Open</th>
+                <th>Close</th>
+                <th>Volume</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stock in stocks %}
+                <tr>
+                    <td>{{ stock.date }}</td>
+                    <td>{{ stock.trade_code }}</td>
+                    <td>{{ stock.high }}</td>
+                    <td>{{ stock.low }}</td>
+                    <td>{{ stock.open }}</td>
+                    <td>{{ stock.close }}</td>
+                    <td>{{ stock.volume }}</td>
+                    <td>
+                        <a href="{% url 'stock_detail' pk=stock.pk %}">View</a>
+                        <a href="{% url 'stock_edit' pk=stock.pk %}">Edit</a>
+                        <a href="{% url 'stock_delete' pk=stock.pk %}">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'stock_create' %}">Add Stock</a>
+
+    <script>
+        // JavaScript code for creating the line chart and handling dropdown change
+        var stocksData = JSON.parse('{{ stocks_json|escapejs }}');
+
+        // Function to filter stocks based on selected trade_code
+        function filterStocksByTradeCode(tradeCode) {
+            if (tradeCode === 'all') {
+                return stocksData;
+            } else {
+                return stocksData.filter(function (stock) {
+                    return stock.trade_code === tradeCode;
+                });
+            }
+        }
+
+        // Function to update chart data based on selected trade_code
+        function updateChartData() {
+            var selectedTradeCode = document.getElementById('tradeCodeDropdown').value;
+            var filteredStocks = filterStocksByTradeCode(selectedTradeCode);
+
+            // Update the chart data here (use a chart library like Chart.js)
+            // For example, update a global variable or call a function to update the chart
+        }
+
+        // Initial call to set up the chart
+        updateChartData();
+    </script>
+</body>
+</html>

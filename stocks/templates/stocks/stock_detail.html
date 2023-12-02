@@ -1,0 +1,15 @@
+<!-- stocks/templates/stock_detail.html -->
+<html>
+<body>
+    <h2>Stock Detail</h2>
+    <p>Date: {{ stock.date }}</p>
+    <p>Trade Code: {{ stock.trade_code }}</p>
+    <p>High: {{ stock.high }}</p>
+    <p>Low: {{ stock.low }}</p>
+    <p>Open: {{ stock.open }}</p>
+    <p>Close: {{ stock.close }}</p>
+    <p>Volume: {{ stock.volume }}</p>
+
+    <a href="{% url 'home' %}">Back to Home</a>
+</body>
+</html>
