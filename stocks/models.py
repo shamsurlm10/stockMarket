@@ -1,4 +1,11 @@
 from django.db import models
+#from django.core.exceptions import ValidationError
+
+# def validate_date(value):
+#     try:
+#         models.DateField().clean(value,None)
+#     except ValidationError:
+#         raise ValidationError("Invalid date format. Use YYYY-MM-DD.")
 
 class Stock(models.Model):
     date = models.DateField()

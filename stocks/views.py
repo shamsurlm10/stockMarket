@@ -8,7 +8,7 @@ def home(request):
 
 def stock_detail(request, pk):
     stock = get_object_or_404(Stock, pk=pk)
-    return render(request, 'stock_detail.html', {'stock': stock})
+    return render(request, 'stocks/stock_detail.html', {'stock': stock})
 
 def stock_create(request):
     if request.method == 'POST':
@@ -18,7 +18,7 @@ def stock_create(request):
             return redirect('home')
     else:
         form = StockForm()
-    return render(request, 'stock_form.html', {'form': form})
+    return render(request, 'stocks/stock_form.html', {'form': form})
 
 def stock_edit(request, pk):
     stock = get_object_or_404(Stock, pk=pk)
@@ -29,7 +29,7 @@ def stock_edit(request, pk):
             return redirect('home')
     else:
         form = StockForm(instance=stock)
-    return render(request, 'stock_form.html', {'form': form})
+    return render(request, 'stocks/stock_form.html', {'form': form})
 
 def stock_delete(request, pk):
     stock = get_object_or_404(Stock, pk=pk)
