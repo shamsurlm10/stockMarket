@@ -1,22 +1,22 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stock Data</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         canvas {
             max-width: 800px;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <h1>Stock Data</h1>
-
-    <!-- Line chart and dropdown for trade_code selection -->
     <div>
         <label for="tradeCodeDropdown">Select Trade Code:</label>
         <select id="tradeCodeDropdown" onchange="updateChartData()">
             <option value="all">All Trade Codes</option>
-            <!-- Add options dynamically based on available trade codes -->
             {% for trade_code in trade_codes %}
                 <option value="{{ trade_code }}">{{ trade_code }}</option>
             {% endfor %}
@@ -27,95 +27,11 @@
         <canvas id="lineChart"></canvas>
     </div>
 
-    <table>
-        <!-- ... table code ... -->
-    </table>
-
-    <a href="{% url 'stock_create' %}">Add Stock</a>
-
-
-
-    <!-- line chart -->
-    <div>
-        <label for="tradeCodeDropdown">Select Trade Code:</label>
-        <select id="tradeCodeDropdown" onchange="updateChartData()">
-            <option value="all">All Trade Codes</option>
-            <!-- Add options dynamically based on available trade codes -->
-            {% for trade_code in trade_codes %}
-                <option value="{{ trade_code }}">{{ trade_code }}</option>
-            {% endfor %}
-        </select>
-    </div>
-
-    <!-- Line chart -->
-    <div>
-        <canvas id="lineChart"></canvas>
-    </div>
-
-    <!-- Bar chart for volume -->
     <div>
         <canvas id="barChart"></canvas>
     </div>
 
-    <!-- <script>
-        var stocksData = JSON.parse('{{ stocks_json|escapejs }}');
-        var chartData = [];
-        var labels = [];
-
-        function filterStocksByTradeCode(tradeCode) {
-            if (tradeCode === 'all') {
-                return stocksData;
-            } else {
-                return stocksData.filter(function (stock) {
-                    return stock.trade_code === tradeCode;
-                });
-            }
-        }
-
-        function updateChartData() {
-            var selectedTradeCode = document.getElementById('tradeCodeDropdown').value;
-            var filteredStocks = filterStocksByTradeCode(selectedTradeCode);
-
-            // Extract labels and data for the line chart
-            labels = filteredStocks.map(function (stock) {
-                return stock.date;
-            });
-
-            chartData = filteredStocks.map(function (stock) {
-                return stock.close;
-            });
-
-            updateChart();
-        }
-
-        function updateChart() {
-            var ctx = document.getElementById('lineChart').getContext('2d');
-            var myChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Close Prices',
-                        data: chartData,
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1,
-                        fill: false
-                    }]
-                },
-                options: {
-                    scales: {
-                        x: [{
-                            type: 'linear',
-                            position: 'bottom'
-                        }]
-                    }
-                }
-            });
-        }
-
-        // Initial call to set up the chart
-        updateChartData();
-    </script> -->
+    <a href="{% url 'stock_create' %}">Add Stock</a>
 
     <table>
         <thead>
@@ -148,119 +64,78 @@
             {% endfor %}
         </tbody>
     </table>
-
+    
     <div class="pagination">
         <span class="step-links">
             {% if stocks.has_previous %}
                 <a href="?page=1">&laquo; first</a>
                 <a href="?page={{ stocks.previous_page_number }}">previous</a>
             {% endif %}
-
+    
             <span class="current">
                 Page {{ stocks.number }} of {{ stocks.paginator.num_pages }}.
             </span>
-
+    
             {% if stocks.has_next %}
                 <a href="?page={{ stocks.next_page_number }}">next</a>
                 <a href="?page={{ stocks.paginator.num_pages }}">last &raquo;</a>
             {% endif %}
         </span>
     </div>
-
-
-
+    
     <script>
-        var stocksData = JSON.parse('{{ stocks_json|escapejs }}');
-        var chartData = [];
-        var labels = [];
-
-        function filterStocksByTradeCode(tradeCode) {
-            if (tradeCode === 'all') {
-                return stocksData;
-            } else {
-                return stocksData.filter(function (stock) {
-                    return stock.trade_code === tradeCode;
-                });
-            }
-        }
-
+        // Your JavaScript code for chart implementation
+        var ctxLine = document.getElementById('lineChart').getContext('2d');
+        var ctxBar = document.getElementById('barChart').getContext('2d');
+        var lineChart;
+        var barChart;
+    
         function updateChartData() {
-            var selectedTradeCode = document.getElementById('tradeCodeDropdown').value;
-            var filteredStocks = filterStocksByTradeCode(selectedTradeCode);
-
-            // Extract labels and data for the line chart
-            labels = filteredStocks.map(function (stock) {
-                return stock.date;
-            });
-
-            chartData = filteredStocks.map(function (stock) {
-                return stock.close;
-            });
-
+            // Implement logic to update chart data based on selected trade code
+            // You can fetch data using AJAX or any other method and update the chart datasets
+            // For simplicity, let's assume you have a JavaScript variable named 'chartData' containing the data
+            // The structure of chartData may vary based on your requirements
+    
+            // Example:
+            var chartData = {
+                labels: ['Date1', 'Date2', 'Date3'], // Replace with actual dates
+                datasets: [{
+                    label: 'Close',
+                    data: [100, 150, 120], // Replace with actual close values
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    fill: false
+                }]
+            };
+    
             // Update line chart
-            updateLineChart();
-
-            // Extract data for the bar chart (volume)
-            var volumeData = filteredStocks.map(function (stock) {
-                return stock.volume;
-            });
-
-            // Update bar chart
-            updateBarChart(volumeData);
-        }
-
-        function updateLineChart() {
-            var ctx = document.getElementById('lineChart').getContext('2d');
-            var myLineChart = new Chart(ctx, {
+            if (lineChart) {
+                lineChart.destroy(); // Destroy existing chart before creating a new one
+            }
+            lineChart = new Chart(ctxLine, {
                 type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Close Prices',
-                        data: chartData,
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1,
-                        fill: false
-                    }]
-                },
+                data: chartData,
                 options: {
-                    scales: {
-                        x: [{
-                            type: 'linear',
-                            position: 'bottom'
-                        }]
-                    }
+                    // Add options as needed
                 }
             });
-        }
-
-        function updateBarChart(volumeData) {
-            var ctx = document.getElementById('barChart').getContext('2d');
-            var myBarChart = new Chart(ctx, {
+    
+            // Update bar chart
+            if (barChart) {
+                barChart.destroy();
+            }
+            barChart = new Chart(ctxBar, {
                 type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Volume',
-                        data: volumeData,
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 1
-                    }]
-                },
+                data: chartData,
                 options: {
-                    scales: {
-                        y: [{
-                            type: 'linear',
-                            position: 'left'
-                        }]
-                    }
+                    // Add options as needed
                 }
             });
         }
-
-        // Initial call to set up the charts
+    
+        // Initial chart rendering
         updateChartData();
     </script>
-</body>
-</html>
+    </body>
+    </html>
+    
